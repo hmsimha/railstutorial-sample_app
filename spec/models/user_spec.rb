@@ -74,17 +74,17 @@ describe User do
 
   describe "when password is not present" do
   	before { @user.password = @user.password_confirmation = " " }
-  	it { should_not_be_valid }
+  	it { should_not be_valid }
   end
 
   describe "when password doesn't match confirmation" do
   	before { @user.password_confirmation = "mismatch" }
-  	it { should_not_be_valid }
+  	it { should_not be_valid }
   end
 
   describe "when password confirmation is nil" do
   	before { @user.password_confirmation = nil }
-  	it { should_not_be_valid }
+  	it { should_not be_valid }
   end
 
   describe "with a password that's too short" do
@@ -107,4 +107,14 @@ describe User do
       specify { user_for_invalid_password.should be_false }
     end
   end
+
+  describe "email address with mixed case" do
+    let(:mixed_case_email) { "Foo@ExAMPle.CoM" }
+
+    it "should be saved as all lower-case" do
+      @user.email = mixed_case_email
+      @user.save
+      @user.reload.email.should == mixed_case_email.downcase
+    end
+  end 
 end
